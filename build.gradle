@@ -1,0 +1,36 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.5.RELEASE'
+	id 'java'
+	id 'eclipse'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //spring-webmvc and hibernate-validator was included in boot-starter-web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	//security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	//thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.1.5.RELEASE'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.0.4.RELEASE'
+
+	//MyBatis
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.1'
+
+	//database
+    implementation 'org.postgresql:postgresql:42.2.5.jre7'
+
+    //data source
+	implementation 'commons-dbcp:commons-dbcp:1.4'
+}

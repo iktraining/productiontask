@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gLibrary.dataaccess.mapper.DepartmentDaoMapperaaa">
+	<selectxx id="findDepartmentList" parameterType="gLibrary.domain.users.departments.Department"
+		resultType="gLibrary.domain.users.departments.Department">
+		SELECT
+			department_code AS "departmentCode.code"
+			,department_name AS "departmentName.name"
+			, department_kana AS "departmentKana.kana"
+		FROM
+			users.departments
+		ORDER BY
+			department_code asc
+	</select>
+</mapper>
