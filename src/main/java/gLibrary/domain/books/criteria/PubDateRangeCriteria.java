@@ -4,6 +4,8 @@ public class PubDateRangeCriteria {
 	private PubFromCriteria pubFromCriteria;
 	private PubToCriteria pubToCriteria;
 
+	public PubDateRangeCriteria() {}
+
 	public PubDateRangeCriteria(PubFromCriteria pubFromCriteria, PubToCriteria pubToCriteria) {
 		this.pubFromCriteria = pubFromCriteria;
 		this.pubToCriteria = pubToCriteria;
@@ -16,4 +18,13 @@ public class PubDateRangeCriteria {
 	public PubToCriteria getPubToCriteria() {
 		return pubToCriteria;
 	}
+
+	public void setPubFromCriteria(PubFromCriteria pubFromCriteria) {
+		this.pubFromCriteria = pubFromCriteria;
+	}
+
+	public void setPubToCriteria(PubToCriteria pubToCriteria) {
+		this.pubToCriteria = pubToCriteria;
+	}
+
 }

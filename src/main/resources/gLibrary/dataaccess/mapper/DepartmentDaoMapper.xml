@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gLibrary.dataaccess.mapper.DepartmentDaoMapper">
+	<resultMap id="departmentMap" type="gLibrary.domain.users.departments.Department">
+		<result column="department_code" property="departmentCode.code"/>
+		<result column="department_name" property="departmentName.name"/>
+	</resultMap>
+	<select id="findDepartmentList"
+		 resultMap="departmentMap">
+		SELECT
+			department_code
+			,department_name
+		FROM
+			users.departments
+		ORDER BY
+			department_code asc
+	</select>
+</mapper>

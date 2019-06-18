@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gLibrary.dataaccess.mapper.SearchDaoMapper">
+	<resultMap id="keywordMap" type="gLibrary.domain.books.Book">
+		<id column="isbn" property="isbn.isbn"/>
+		<result column="title" property="title.titleText.text"/>
+		<result column="author" property="author.author"/>
+		<result column="publisher_name" property="publisher.publisherName.name"/>
+		<result column="pubdate" property="pubDate.date"/>
+		<collection select="selectDepartment" column="isbn" property="recommendedDepartment.departmentList.departmentList" >
+		</collection>
+		<collection select="selectTechniqueLevel" column="isbn" property="techniqueLevelList">
+		</collection>
+	</resultMap>
+	<resultMap id="department" type="gLibrary.domain.users.departments.Department">
+		<result column="department_code" property="departmentCode.code"/>
+		<result column="department_name" property="departmentName.name"/>
+	</resultMap>
+	<resultMap id="techniqueLevel" type="gLibrary.domain.books.techniquelevels.TechniqueLevel">
+		<result column="technique_rank" property="techniqueRank.rank"/>
+		<result column="grade" property="grade.grade"/>
+	</resultMap>
+
+	<select id="keywordSearch" resultMap="keywordMap">
+		SELECT
+			book.isbn,
+			book.title,
+			book.author,
+			publisher.publisher_name,
+			book.pubdate,
+			department.department_name,
+			booklevel.technique_rank
+		FROM
+			books.books book
+		INNER JOIN
+			books.publishers publisher
+		ON
+			book.publisher_number = publisher.publisher_number
+		INNER JOIN
+			books.recommendeddepartments recommendeddepartment
+		ON
+			book.isbn = recommendeddepartment.isbn
+		INNER JOIN
+			users.departments department
+		ON
+			department.department_code = recommendeddepartment.department_code
+		INNER JOIN
+			books.book_levels booklevel
+		ON
+			booklevel.isbn = book.isbn
+		INNER JOIN
+			books.technique_levels techniquelevel
+		ON
+			techniquelevel.technique_rank = booklevel.technique_rank
+		INNER JOIN
+			books.book_descriptions book_description
+		ON
+			book.isbn = book_description.isbn
+		ORDER BY
+			isbn asc
+	</select>
+
+	<select id="selectDepartment" resultMap="department">
+		select
+			department.department_code,
+			department.department_name
+		from
+			books.recommendeddepartments recommendeddepartment
+		inner join
+			users.departments department
+		on
+			recommendeddepartment.department_code = department.department_code
+		where
+			recommendeddepartment.isbn = #{isbn}
+	</select>
+	<select id="selectTechniqueLevel" resultMap="techniqueLevel">
+		select
+			technique_level.technique_rank,
+			technique_level.grade
+		from
+			books.technique_levels technique_level
+		inner join
+			books.book_levels book_level
+		on
+			technique_level.technique_rank = book_level.technique_rank
+		where
+			book_level.isbn = #{isbn}
+	</select>
+</mapper>

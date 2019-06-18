@@ -1,43 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="/bulma/css/bulma.min.css" th:href="@{/bulma/css/bulma.min.css}">
-	<link rel="stylesheet" href="/css/gLibrary.css" th:href="@{/css/gLibrary.css}">
-	<title>ログイン - Genuine Library</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/bulma/css/bulma.min.css" th:href="@{/bulma/css/bulma.min.css}">
+  <link rel="stylesheet" href="/css/gLibrary.css" th:href="@{/css/gLibrary.css}">
+  <title>ログイン - Genuine Library</title>
 </head>
 <body>
-<div class="section">
-	<div class="container">
-		<div class="column is-half is-offset-one-quarter">
-			<h1 class="title is-4 has-text-link">Genuine Library<span class="is-size-5">へログイン</span></h1>
-			<form method="POST" action="/login">
-				<div class="field">
-					<div class="control">
-						<label class="label" for="userid">ユーザーID</label>
-						<input class="input"  type="text" id="userid" name="userId" th:value="${userId_value}"><br>
-					</div>
-				</div>
-				<div class="field">
-					<div class="control">
-						<label class="label" for="password">パスワード</label>
-						<input class="input" type="password" id="password" name="password" th:value="${password_value}"><br>
-					</div>
-				</div>
-				<div class="field login-error-message" th:if="${session['SPRING_SECURITY_LAST_EXCEPTION'] != null}">
-		  			<p>
-		  				<span class="has-text-danger">ユーザーIDまたはパスワードが違います</span>
-		  			</p>
-		  		</div>
-				<div class="field login-field">
-					<div class="control">
-						<input class="button is-info is-outlined is-fullwidth" type="submit" value="ログイン">
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
+  <div class="section">
+    <div class="container">
+      <div class="column is-half is-offset-one-quarter">
+        <h1 class="title is-4 has-text-link">
+          Genuine Library<span class="is-size-5">へログイン</span>
+        </h1>
+        <form method="POST" th:action="@{/login}">
+          <div class="field">
+            <div class="control">
+              <label class="label" for="userid">ユーザーID</label> <input
+                class="input" type="text" id="userid" name="userId"
+                th:value="${userId_value}"><br>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <label class="label" for="password">パスワード</label> <input
+                class="input" type="password" id="password"
+                name="password" th:value="${password_value}"><br>
+            </div>
+          </div>
+          <div class="field login-error-message"
+            th:if="${session['SPRING_SECURITY_LAST_EXCEPTION'] != null}">
+            <p>
+              <span class="has-text-danger">ユーザーIDまたはパスワードが違います</span>
+            </p>
+          </div>
+          <div class="field login-field">
+            <div class="control">
+              <input class="button is-info is-outlined is-fullwidth"
+                type="submit" value="ログイン">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

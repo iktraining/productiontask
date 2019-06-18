@@ -5,6 +5,8 @@ import java.util.Date;
 public class PubFromCriteria {
 	private Date date;
 
+	public PubFromCriteria() {}
+
 	public PubFromCriteria(Date date) {
 		this.date = date;
 	}
@@ -12,4 +14,9 @@ public class PubFromCriteria {
 	public Date getDate() {
 		return date;
 	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 }

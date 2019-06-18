@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/bulma/css/bulma.min.css" th:href="@{/bulma/css/bulma.min.css}">
+  <link rel="stylesheet" href="/css/gLibrary.css" th:href="@{/cs	s/gLibrary.css}">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script type="text/javascript"
+    src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <title>Insert title here</title>
+</head>
+<body>
+  <header th:insert="~{header :: #header}"></header>
+  <main>
+  <div class="section">
+    <div class="container">
+      <div class="tile is-ancestor">
+        <div class="tile is-vertical is-12">
+<!-- 上部検索窓 -->
+          <div class="tile is-parent">
+            <div class="tile is-parent search-wrapper">
+              <div class="tile is-child is-danger">
+                <form th:action="@{/search}" method="POST">
+                  <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                      <label class="label" for="new-keyword-search">キーワード検索</label>
+                    </div>
+                    <div class="field-body">
+                      <div class="field has-addons">
+                        <div class="control is-expanded">
+                          <input id="new-keyword-search" class="input"
+                            type="text" placeholder="new search"
+                            name="newkeyword">
+                        </div>
+                        <div class="control">
+                          <input class="button is-info" type="submit"
+                            value="検索">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+<!-- 上部検索窓ここまで -->
+          <div class="tile is-parent">
+<!-- 検索条件欄 -->
+            <div class="tile is-parent is-3">
+              <div class="tile is-child is-12">
+                <div class="card">
+                  <div class="card-header has-background-grey-dark">
+                    <p class="card-header-title has-text-white-ter">検索条件</p>
+                  </div>
+                  <form th:action="@{/search}" method="POST"
+                    th:object="${bookSearchCriteria}">
+                    <div class="card-content">
+                      <div class="field">
+                        <div class="field-label is-normal has-text-left">
+                          <label class="label" for="keyword-research">キーワード</label>
+                        </div>
+                        <div class="field-body">
+                          <div class="field">
+                            <div class="control">
+                              <input id="keyword-research" class="input"
+                                type="text"
+                                th:value="*{keywordCriteria.keyword == null ? '' : keywordCriteria.keyword}">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="field">
+                        <div class="field-label is-normal has-text-left">
+                          <label class="label" for="isbn">ISBN</label>
+                        </div>
+                        <div class="field-body">
+                          <div class="field">
+                            <div class="control">
+                              <input class="input" type="text" id="isbn"
+                                th:value="*{isbn.isbn == null ? '' : isbn.isbn}">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="field">
+                        <div class="field-label is-normal has-text-left">
+                          <label class="label" for="title">タイトル</label>
+                        </div>
+                        <div class="field-body">
+                          <div class="field">
+                            <div class="control">
+                              <input class="input" type="text"
+                                id="title"
+                                th:value="*{titleCriteria.title == null ? '' : titleCriteria.title}">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="field">
+                        <div class="field-label is-normal has-text-left">
+                          <label class="label" for="author">著者</label>
+                        </div>
+                        <div class="field-body">
+                          <div class="field">
+                            <div class="control">
+                              <input class="input" type="text"
+                                id="author"
+                                th:value="*{authorCriteria.author == null ? '' : authorCriteria.author}">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="field">
+                        <div class="field-label is-normal has-text-left">
+                          <label class="label" for="publisher">出版社</label>
+                        </div>
+                        <div class="field-body">
+                          <div class="field">
+                            <div class="control">
+                              <input class="input" type="text"
+                                id="publisher"
+                                th:value="*{publisherNameCriteria.name == null ? '' : publisherNameCriteria.name}">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="field">
+                        <div class="field-label is-normal has-text-left">
+                          <label class="label" for="pubdate">出版日</label>
+                        </div>
+                        <div class="field-body">
+                          <div class="field">
+                            <div class="control">
+                              <div class="select pubdate">
+                                <select id="pub-from-year"
+                                  name="pubfromyear">
+                                  <option value="" selected>----</option>
+                                  <option
+                                    th:each="i:${#numbers.sequence(#numbers.formatInteger(#dates.format(#dates.createNow(), 'yyyy'), 4), 1970)}"
+                                    th:value="${i}" th:text="${i}"></option>
+                                </select>
+                              </div>
+                            </div>
+                            <label class="label date-label"
+                              for="pub-from-year">年</label>
+                            <div class="control">
+                              <div class="select pubdate">
+                                <select id="pub-from-month"
+                                  name="pubfrommonth">
+                                  <option value="" selected>--</option>
+                                  <option
+                                    th:each="i:${#numbers.sequence(1,12)}"
+                                    th:value="${i}" th:text="${i}"></option>
+                                </select>
+                              </div>
+                            </div>
+                            <label class="label date-label"
+                              for="pub-from-month">月</label>
+                          </div>
+                          <span class="date-range-dash">～</span>
+                          <div class="field">
+                            <div class="control">
+                              <div class="select pubdate">
+                                <select id="pub-to-year"
+                                  name="pubtoyear">
+                                  <option value="" selected>----</option>
+                                  <option
+                                    th:each="i:${#numbers.sequence(#numbers.formatInteger(#dates.format(#dates.createNow(), 'yyyy'), 4), 1970)}"
+                                    th:value="${i}" th:text="${i}"></option>
+                                </select>
+                              </div>
+                            </div>
+                            <label class="label date-label"
+                              for="pub-to-year">年</label>
+                            <div class="control">
+                              <div class="select pubdate">
+                                <select id="pub-to-month"
+                                  name="pubtomonth">
+                                  <option value="" selected>--</option>
+                                  <option
+                                    th:each="i:${#numbers.sequence(1,12)}"
+                                    th:value="${i}" th:text="${i}"></option>
+                                </select>
+                              </div>
+                            </div>
+                            <label class="label date-label"
+                              for="pub-to-month">月</label>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- check box -->
+                      <div class="field">
+                        <div class="field-label is-normal has-text-left">
+                          <label class="label" for="pubdate">推薦部署</label>
+                        </div>
+                        <div class="field-body">
+                          <div class="checkbox-item"
+                            th:each="departmentList:${departmentList.getDepartmentList()}">
+                            <div class="field">
+                              <div class="control">
+                                <label class="checkbox"> <input
+                                  type="checkbox"
+                                  th:attr="name=${departmentList.departmentCode.code}">
+                                  <span
+                                  th:text="${departmentList.departmentName.name}"></span>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="field">
+                        <div class="field-label is-normal has-text-left">
+                          <label class="label" for="level"><span
+                            class="label-text">読者に求める</span><span
+                            class="label-text">技術レベル</span></label>
+                        </div>
+                        <div class="field-body">
+                          <div class="checkbox-item"
+                            th:each="techniqueLevelList:${techniqueLevelList.getTechniqueLevelList()}">
+                            <div class="field">
+                              <div class="control">
+                                <label class="checkbox"> <input
+                                  type="checkbox"
+                                  th:attr="name=${techniqueLevelList.techniqueRank.rank}">
+                                  <span
+                                  th:text="${techniqueLevelList.grade.grade}"></span>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="field card-footer">
+                      <div class="card-footer-item">
+                        <div class="control">
+                          <input class="button is-danger is-outlined"
+                            type="reset" value="クリア">
+                        </div>
+                      </div>
+                      <div class="card-footer-item">
+                        <div class="control">
+                          <input class="button is-info" type="submit"
+                            value="再検索">
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+<!-- 検索条件欄ここまで -->
+<!-- 検索結果欄 -->
+            <div class="tile is-parent">
+              <div class="tile is-child notification">
+                <p>検索結果【件数】</p>
+                <label class="label order-label" for="order-change">並び替え</label>
+                <div class="select order-change">
+                  <select id="order-change">
+                    <option value="" selected>----</option>
+                  </select>
+                </div>
+                <table class="table is-striped is-hoverable">
+                  <thead>
+                    <tr>
+                      <th>タイトル</th>
+                      <th>著者</th>
+                      <th>出版社</th>
+                      <th>出版日</th>
+                      <th>推薦部署</th>
+                      <th>技術レベル</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr th:each="book:${bookList.getBookList()}">
+                      <td th:text="${book.title.titleText.text}"></td>
+                      <td th:text="${book.author.author}"></td>
+                      <td th:text="${book.publisher.publisherName.name}"></td>
+                      <td th:text="${#dates.format(book.pubDate.date, 'yyyy/MM')}"></td>
+                      <td
+                      th:each="department:${book.recommendedDepartment.departmentList.getDepartmentList()}"
+                      th:text="${department.departmentName.name}"></td>
+                      <!--
+                      <td th:text="${book.techniqueLevelList.techniqueLevel.grade.grade}"></td>
+                      -->
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+<!-- 検索結果欄ここまで -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </main>
+  <footer class="footer" th:insert="~{footer :: #footer}"></footer>
+  <script type="text/javascript" src="/js/headermenu.js" th:src="@{/js/headermenu.js}" charset="utf-8"></script>
+</body>
+</html>

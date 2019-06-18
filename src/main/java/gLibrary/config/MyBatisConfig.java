@@ -2,6 +2,7 @@ package gLibrary.config;
 
 import javax.sql.DataSource;
 
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,17 +16,13 @@ public class MyBatisConfig {
 	@Autowired
 	DataSource dataSource;
 
-	/*@Bean
+	@Bean
 	public SqlSessionFactoryBean sqlSessionFactory()
 			throws Exception {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource);
-		sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("application.properties"));
-		sqlSessionFactoryBean.setMapperLocations(
-				new Resource[]{new ClassPathResource("src/main/resources/gLibrary/dataaccess/mapper/departmentmapper.xml")}
-				);
 		return sqlSessionFactoryBean;
-	}*/
+	}
 
 	@Bean
 	public PlatformTransactionManager transactionManager() {

@@ -1,15 +1,21 @@
-package gLibrary.domain.books.TechniqueLevels;
+package gLibrary.domain.books.techniquelevels;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class TechniqueLevelList {
-	private ArrayList<TechniqueLevel> techniqueLevelList;
+	private List<TechniqueLevel> techniqueLevelList;
 
-	public TechniqueLevelList(ArrayList<TechniqueLevel> techniqueLevelList) {
+	public TechniqueLevelList() {}
+
+	public TechniqueLevelList(List<TechniqueLevel> techniqueLevelList) {
 		this.techniqueLevelList = techniqueLevelList;
 	}
 
-	public ArrayList<TechniqueLevel> getTechniqueLevelList(){
+	public List<TechniqueLevel> getTechniqueLevelList(){
 		return techniqueLevelList;
+	}
+
+	public void setTechniqueLevelList(List<TechniqueLevel> techniqueLevelList) {
+		this.techniqueLevelList = techniqueLevelList;
 	}
 }

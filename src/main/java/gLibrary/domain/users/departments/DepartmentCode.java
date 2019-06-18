@@ -6,8 +6,13 @@ public class DepartmentCode {
 	public DepartmentCode(String code) {
 		this.code = code;
 	}
+	public DepartmentCode() {}
 
 	public String getCode() {
 		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 }

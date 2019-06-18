@@ -1,15 +1,27 @@
 package gLibrary.domain.books;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class BookList {
-	private ArrayList<Book> bookList;
+	private List<Book> bookList;
 
-	public BookList(ArrayList<Book> bookList) {
+	public BookList() {}
+
+	public BookList(List<Book> bookList) {
 		this.bookList = bookList;
 	}
 
-	public ArrayList<Book> getBookList() {
+	public List<Book> getBookList() {
 		return bookList;
 	}
+
+	public void setBookList(List<Book> bookList) {
+		this.bookList = bookList;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("BookList [bookList=%s]", bookList);
+	}
+
 }

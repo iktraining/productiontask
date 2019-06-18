@@ -26,8 +26,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/logout").permitAll()
                 //.antMatchers("/admin").hasAuthority("role_admin") // /admin配下にはロールrole_admin(大文字小文字区別あり)が設定されているユーザでログインしている場合のみアクセスできる
-                //.antMatchers("/index").authenticated()  //user配下には、認証されているユーザであればアクセスできる
-                .anyRequest().denyAll()//上記以外のパスには、アクセスできる
+                .antMatchers("/index").authenticated()  //認証されているユーザであればアクセスできる
+                .antMatchers("/search").authenticated()
+                //.anyRequest().denyAll()//上記以外のパスには、アクセスできる
                 .and()
             .formLogin() //認証方式には、フォームログイン方式を採用する
             	.loginPage("/login")//ログイン画面URL

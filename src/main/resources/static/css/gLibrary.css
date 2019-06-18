@@ -2,3 +2,22 @@
 .login-field {
 	margin-top: 36px;
 }
+.checkbox-item {
+	margin-right: 15px;
+}
+
+/* Index form */
+.date-label {
+	margin: 0 .8em .5em;
+}
+.date-range-dash {
+	margin-right: 1.25rem;
+}
+.label-text {
+	display: inline-block;
+}
+
+/* search result */
+.search-wrapper {
+  margin: 0 5rem 0;
+}

@@ -1,29 +1,37 @@
 package gLibrary.domain.books.criteria;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
+
 import gLibrary.domain.books.Isbn;
-import gLibrary.domain.books.TechniqueLevels.TechniqueLevelList;
+import gLibrary.domain.books.techniquelevels.TechniqueLevelList;
 import gLibrary.domain.users.departments.DepartmentList;
 
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Component
 public class BookSearchCriteria {
 	private AuthorCriteria authorCriteria;
 	private TitleCriteria titleCriteria;
 	private PublisherNameCriteria publisherNameCriteria;
-	private KeywordCriteria keywordCritera;
+	private KeywordCriteria keywordCriteria;
 	private PubDateRangeCriteria pubDateRangeCriteria;
 
 	private Isbn isbn;
 	private TechniqueLevelList techniqueLevelList;
 	private DepartmentList departmentList;
 
+	public BookSearchCriteria() {}
+
 	public BookSearchCriteria(AuthorCriteria authorCriteria, TitleCriteria titleCriteria,
-			PublisherNameCriteria publisherNameCriteria, KeywordCriteria keywordCritera,
+			PublisherNameCriteria publisherNameCriteria, KeywordCriteria keywordCriteria,
 			PubDateRangeCriteria pubDateRangeCriteria, Isbn isbn, TechniqueLevelList techniqueLevelList,
 			DepartmentList departmentList) {
 		super();
 		this.authorCriteria = authorCriteria;
 		this.titleCriteria = titleCriteria;
 		this.publisherNameCriteria = publisherNameCriteria;
-		this.keywordCritera = keywordCritera;
+		this.keywordCriteria = keywordCriteria;
 		this.pubDateRangeCriteria = pubDateRangeCriteria;
 		this.isbn = isbn;
 		this.techniqueLevelList = techniqueLevelList;
@@ -42,8 +50,8 @@ public class BookSearchCriteria {
 		return publisherNameCriteria;
 	}
 
-	public KeywordCriteria getKeywordCritera() {
-		return keywordCritera;
+	public KeywordCriteria getKeywordCriteria() {
+		return keywordCriteria;
 	}
 
 	public PubDateRangeCriteria getPubDateRangeCriteria() {
@@ -61,4 +69,37 @@ public class BookSearchCriteria {
 	public DepartmentList getDepartmentList() {
 		return departmentList;
 	}
+
+	public void setAuthorCriteria(AuthorCriteria authorCriteria) {
+		this.authorCriteria = authorCriteria;
+	}
+
+	public void setTitleCriteria(TitleCriteria titleCriteria) {
+		this.titleCriteria = titleCriteria;
+	}
+
+	public void setPublisherNameCriteria(PublisherNameCriteria publisherNameCriteria) {
+		this.publisherNameCriteria = publisherNameCriteria;
+	}
+
+	public void setKeywordCriteria(KeywordCriteria keywordCriteria) {
+		this.keywordCriteria = keywordCriteria;
+	}
+
+	public void setPubDateRangeCriteria(PubDateRangeCriteria pubDateRangeCriteria) {
+		this.pubDateRangeCriteria = pubDateRangeCriteria;
+	}
+
+	public void setIsbn(Isbn isbn) {
+		this.isbn = isbn;
+	}
+
+	public void setTechniqueLevelList(TechniqueLevelList techniqueLevelList) {
+		this.techniqueLevelList = techniqueLevelList;
+	}
+
+	public void setDepartmentList(DepartmentList departmentList) {
+		this.departmentList = departmentList;
+	}
+
 }

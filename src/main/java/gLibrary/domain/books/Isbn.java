@@ -1,13 +1,19 @@
 package gLibrary.domain.books;
 
 public class Isbn {
-	private String Isbn;
+	private String isbn;
 
-	public Isbn(String Isbn) {
-		this.Isbn = Isbn;
+	public Isbn() {}
+
+	public Isbn(String isbn) {
+		this.isbn = isbn;
 	}
 
 	public String getIsbn() {
-		return Isbn;
+		return isbn;
+	}
+
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
 	}
 }

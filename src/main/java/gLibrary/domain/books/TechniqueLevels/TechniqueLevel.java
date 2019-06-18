@@ -1,8 +1,11 @@
-package gLibrary.domain.books.TechniqueLevels;
+package gLibrary.domain.books.techniquelevels;
 
 public class TechniqueLevel {
 	private TechniqueRank techniqueRank;
 	private Grade grade;
+
+	public TechniqueLevel() {
+	}
 
 	public TechniqueLevel(TechniqueRank techniqueRank, Grade grade) {
 		this.techniqueRank = techniqueRank;
@@ -13,7 +16,15 @@ public class TechniqueLevel {
 		return techniqueRank;
 	}
 
-	public Grade gerGrade() {
+	public Grade getGrade() {
 		return grade;
+	}
+
+	public void setTechniqueRank(TechniqueRank techniqueRank) {
+		this.techniqueRank = techniqueRank;
+	}
+
+	public void setGrade(Grade grade) {
+		this.grade = grade;
 	}
 }

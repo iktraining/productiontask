@@ -7,6 +7,8 @@ public class PubDate {
 	private PubYear pubYear;
 	private PubMonth pubMonth;
 
+	public PubDate() {}
+
 	public PubDate(PubYear pubYear, PubMonth pubMonth) {
 		this.pubYear = pubYear;
 		this.pubMonth = pubMonth;
@@ -24,4 +26,15 @@ public class PubDate {
 		return pubMonth;
 	}
 
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public void setPubYear(PubYear pubYear) {
+		this.pubYear = pubYear;
+	}
+
+	public void setPubMonth(PubMonth pubMonth) {
+		this.pubMonth = pubMonth;
+	}
 }
