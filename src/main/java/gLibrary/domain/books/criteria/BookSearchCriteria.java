@@ -15,7 +15,7 @@ public class BookSearchCriteria {
 	private TitleCriteria titleCriteria;
 	private PublisherNameCriteria publisherNameCriteria;
 	private KeywordCriteria keywordCriteria;
-	private PubDateRangeCriteria pubDateRangeCriteria;
+	private PublicationDateRangeCriteria publicationDateRangeCriteria;
 
 	private Isbn isbn;
 	private TechniqueLevelList techniqueLevelList;
@@ -25,14 +25,14 @@ public class BookSearchCriteria {
 
 	public BookSearchCriteria(AuthorCriteria authorCriteria, TitleCriteria titleCriteria,
 			PublisherNameCriteria publisherNameCriteria, KeywordCriteria keywordCriteria,
-			PubDateRangeCriteria pubDateRangeCriteria, Isbn isbn, TechniqueLevelList techniqueLevelList,
+			PublicationDateRangeCriteria publicationDateRangeCriteria, Isbn isbn, TechniqueLevelList techniqueLevelList,
 			DepartmentList departmentList) {
 		super();
 		this.authorCriteria = authorCriteria;
 		this.titleCriteria = titleCriteria;
 		this.publisherNameCriteria = publisherNameCriteria;
 		this.keywordCriteria = keywordCriteria;
-		this.pubDateRangeCriteria = pubDateRangeCriteria;
+		this.publicationDateRangeCriteria = publicationDateRangeCriteria;
 		this.isbn = isbn;
 		this.techniqueLevelList = techniqueLevelList;
 		this.departmentList = departmentList;
@@ -54,9 +54,6 @@ public class BookSearchCriteria {
 		return keywordCriteria;
 	}
 
-	public PubDateRangeCriteria getPubDateRangeCriteria() {
-		return pubDateRangeCriteria;
-	}
 
 	public Isbn getIsbn() {
 		return isbn;
@@ -86,10 +83,6 @@ public class BookSearchCriteria {
 		this.keywordCriteria = keywordCriteria;
 	}
 
-	public void setPubDateRangeCriteria(PubDateRangeCriteria pubDateRangeCriteria) {
-		this.pubDateRangeCriteria = pubDateRangeCriteria;
-	}
-
 	public void setIsbn(Isbn isbn) {
 		this.isbn = isbn;
 	}
@@ -102,4 +95,11 @@ public class BookSearchCriteria {
 		this.departmentList = departmentList;
 	}
 
+	public PublicationDateRangeCriteria getPublicationDateRangeCriteria() {
+		return publicationDateRangeCriteria;
+	}
+
+	public void setPublicationDateRangeCriteria(PublicationDateRangeCriteria publicationDateRangeCriteria) {
+		this.publicationDateRangeCriteria = publicationDateRangeCriteria;
+	}
 }

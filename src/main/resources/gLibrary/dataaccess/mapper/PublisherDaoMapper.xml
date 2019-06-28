@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gLibrary.dataaccess.mapper.PublisherDaoMapper">
+	<resultMap id="publisher" type="gLibrary.domain.books.publishers.Publisher">
+		<result column="publisher_number" property="publisherNumber.number"/>
+		<result column="publisher_name" property="publisherName.name"/>
+	</resultMap>
+<!-- 社名あいまい検索 -->
+	<select id="likeSearchPublisherName" resultMap="publisher">
+		SELECT
+			publisher_number,
+			publisher_name
+		FROM
+			books.publishers
+		WHERE
+			UPPER(publisher_name) LIKE UPPER('%' || #{word} || '%')
+		ORDER BY
+			publisher_number asc
+	</select>
+<!-- 出版社番号検索byName -->
+	<select id="findPublisherNumberByName" resultMap="publisher">
+		SELECT
+			publisher_number,
+			publisher_name
+		FROM
+			books.publishers
+		WHERE
+			publisher_name =  #{publisherName.name}
+	</select>
+<!-- 出版社登録 -->
+	<insert id="register" parameterType="gLibrary.domain.books.publishers.PublisherName">
+		INSERT INTO
+			books.publishers(publisher_name, created_at, update_at)
+		VALUES
+			(#{name}, now(), now())
+	</insert>
+</mapper>

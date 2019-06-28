@@ -8,7 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
   <script type="text/javascript"
     src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <title>Insert title here</title>
+  <title>Genuine Library - 検索結果</title>
 </head>
 <body>
   <header th:insert="~{header :: #header}"></header>
@@ -133,12 +133,13 @@
                           <div class="field">
                             <div class="control">
                               <div class="select pubdate">
-                                <select id="pub-from-year"
-                                  name="pubfromyear">
+                                <select id="pub-from-year" name="pubfromyear"
+                                        th:field="*{publicationDateRangeCriteria.publicationFromDateCriteria.publicationYear.year}">
                                   <option value="" selected>----</option>
                                   <option
                                     th:each="i:${#numbers.sequence(#numbers.formatInteger(#dates.format(#dates.createNow(), 'yyyy'), 4), 1970)}"
-                                    th:value="${i}" th:text="${i}"></option>
+                                    th:value="${i}" th:text="${i}">
+                                  </option>
                                 </select>
                               </div>
                             </div>
@@ -146,12 +147,13 @@
                               for="pub-from-year">年</label>
                             <div class="control">
                               <div class="select pubdate">
-                                <select id="pub-from-month"
-                                  name="pubfrommonth">
+                                <select id="pub-from-month" name="pubfrommonth"
+                                        th:field="*{publicationDateRangeCriteria.publicationFromDateCriteria.publicationMonth.month}">
                                   <option value="" selected>--</option>
                                   <option
                                     th:each="i:${#numbers.sequence(1,12)}"
-                                    th:value="${i}" th:text="${i}"></option>
+                                    th:value="${i}" th:text="${i}">
+                                  </option>
                                 </select>
                               </div>
                             </div>
@@ -162,12 +164,13 @@
                           <div class="field">
                             <div class="control">
                               <div class="select pubdate">
-                                <select id="pub-to-year"
-                                  name="pubtoyear">
+                                <select id="pub-to-year" name="pubtoyear"
+                                        th:field="*{publicationDateRangeCriteria.publicationToDateCriteria.publicationYear.year}">
                                   <option value="" selected>----</option>
                                   <option
                                     th:each="i:${#numbers.sequence(#numbers.formatInteger(#dates.format(#dates.createNow(), 'yyyy'), 4), 1970)}"
-                                    th:value="${i}" th:text="${i}"></option>
+                                    th:value="${i}" th:text="${i}">
+                                  </option>
                                 </select>
                               </div>
                             </div>
@@ -175,12 +178,13 @@
                               for="pub-to-year">年</label>
                             <div class="control">
                               <div class="select pubdate">
-                                <select id="pub-to-month"
-                                  name="pubtomonth">
+                                <select id="pub-to-month" name="pubtomonth"
+                                        th:field="*{publicationDateRangeCriteria.publicationToDateCriteria.publicationMonth.month}">
                                   <option value="" selected>--</option>
                                   <option
                                     th:each="i:${#numbers.sequence(1,12)}"
-                                    th:value="${i}" th:text="${i}"></option>
+                                    th:value="${i}" th:text="${i}">
+                                  </option>
                                 </select>
                               </div>
                             </div>
@@ -196,14 +200,14 @@
                         </div>
                         <div class="field-body">
                           <div class="checkbox-item"
-                            th:each="departmentList:${departmentList.getDepartmentList()}">
+                            th:each="department:${departmentList.getDepartmentList()}">
                             <div class="field">
                               <div class="control">
                                 <label class="checkbox"> <input
                                   type="checkbox"
-                                  th:attr="name=${departmentList.departmentCode.code}">
+                                  th:attr="name=${department.departmentCode.code}">
                                   <span
-                                  th:text="${departmentList.departmentName.name}"></span>
+                                  th:text="${department.departmentName.name}"></span>
                                 </label>
                               </div>
                             </div>
@@ -218,14 +222,14 @@
                         </div>
                         <div class="field-body">
                           <div class="checkbox-item"
-                            th:each="techniqueLevelList:${techniqueLevelList.getTechniqueLevelList()}">
+                            th:each="techniqueLevel:${techniqueLevelList.getTechniqueLevelList()}">
                             <div class="field">
                               <div class="control">
                                 <label class="checkbox"> <input
                                   type="checkbox"
-                                  th:attr="name=${techniqueLevelList.techniqueRank.rank}">
+                                  th:attr="name=${techniqueLevel.techniqueRank.rank}">
                                   <span
-                                  th:text="${techniqueLevelList.grade.grade}"></span>
+                                  th:text="${techniqueLevel.grade.grade}"></span>
                                 </label>
                               </div>
                             </div>
@@ -279,12 +283,14 @@
                       <td th:text="${book.author.author}"></td>
                       <td th:text="${book.publisher.publisherName.name}"></td>
                       <td th:text="${#dates.format(book.pubDate.date, 'yyyy/MM')}"></td>
-                      <td
-                      th:each="department:${book.recommendedDepartment.departmentList.getDepartmentList()}"
-                      th:text="${department.departmentName.name}"></td>
-                      <!--
-                      <td th:text="${book.techniqueLevelList.techniqueLevel.grade.grade}"></td>
-                      -->
+                      <td th:each="department:${book.recommendedDepartment.departmentList.getDepartmentList()}"
+                          th:text="${department.departmentName.name}">
+                      </td>
+                      <td>
+                        <p th:each="techniqueLevel:${book.techniqueLevelList.getTechniqueLevelList()}"
+                          th:text="${techniqueLevel.grade.grade}">
+                        </p>
+                      </td>
                     </tr>
                   </tbody>
                 </table>

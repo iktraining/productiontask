@@ -17,4 +17,11 @@ public class AuthorCriteria {
 		this.author = author;
 	}
 
+	public boolean hasAuthor() {
+		if(author == null) {
+			return false;
+		}
+		return true;
+	}
+
 }

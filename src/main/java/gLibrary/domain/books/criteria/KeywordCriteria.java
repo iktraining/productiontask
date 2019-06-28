@@ -9,11 +9,22 @@ public class KeywordCriteria {
 		this.keyword = keyword;
 	}
 
+	public boolean isEmpty() {
+		return keyword == null || keyword.isEmpty();
+	}
+
 	public String getKeyword() {
 		return keyword;
 	}
 
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
+	}
+
+	public boolean hasKeyword() {
+		if(keyword == null) {
+			return false;
+		}
+		return true;
 	}
 }

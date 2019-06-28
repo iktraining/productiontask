@@ -1,27 +1,50 @@
 package gLibrary.domain.books;
 
+import javax.validation.Valid;
+
+import org.springframework.stereotype.Component;
+
 import gLibrary.domain.books.bookdescriptions.BookDescription;
 import gLibrary.domain.books.bookimages.BookImage;
 import gLibrary.domain.books.contributors.ContributorList;
 import gLibrary.domain.books.publishers.Publisher;
 import gLibrary.domain.books.techniquelevels.TechniqueLevelList;
 
+@Component
 public class Book {
+	@Valid
 	private Isbn isbn;
+
+	@Valid
 	private Title title;
+
+	@Valid
 	private Author author;
-	private PubDate pubDate;
+
+	@Valid
+	private PublicationDate pubDate;
+
+	@Valid
 	private RecommendedDepartment recommendedDepartment;
 
+	@Valid
 	private Publisher publisher;
+
+	@Valid
 	private BookImage bookImage;
+
+	@Valid
 	private BookDescription bookDescription;
+
+	@Valid
 	private ContributorList contributorList;
+
+	@Valid
 	private TechniqueLevelList techniqueLevelList;
 
 	public Book() {}
 
-	public Book(Isbn isbn, Title title, Author author, PubDate pubDate, RecommendedDepartment recommendedDepartment,
+	public Book(Isbn isbn, Title title, Author author, PublicationDate pubDate, RecommendedDepartment recommendedDepartment,
 			Publisher publisher, BookImage bookImage, BookDescription bookDescription, ContributorList contributorList,
 			TechniqueLevelList techniqueLevelList) {
 		super();
@@ -49,7 +72,7 @@ public class Book {
 		return author;
 	}
 
-	public PubDate getPubDate() {
+	public PublicationDate getPubDate() {
 		return pubDate;
 	}
 
@@ -89,7 +112,7 @@ public class Book {
 		this.author = author;
 	}
 
-	public void setPubDate(PubDate pubDate) {
+	public void setPubDate(PublicationDate pubDate) {
 		this.pubDate = pubDate;
 	}
 

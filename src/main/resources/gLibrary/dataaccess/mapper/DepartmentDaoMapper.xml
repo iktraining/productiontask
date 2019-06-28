@@ -7,8 +7,8 @@
 		<result column="department_code" property="departmentCode.code"/>
 		<result column="department_name" property="departmentName.name"/>
 	</resultMap>
-	<select id="findDepartmentList"
-		 resultMap="departmentMap">
+<!-- 一覧検索 -->
+	<select id="findDepartmentList" resultMap="departmentMap">
 		SELECT
 			department_code
 			,department_name
@@ -17,4 +17,23 @@
 		ORDER BY
 			department_code asc
 	</select>
+<!-- codeからname検索 -->
+	<resultMap id="departmentNameByCodes" type="gLibrary.domain.users.departments.DepartmentName">
+		<result column="department_name" property="name"/>
+	</resultMap>
+		<select id="findDepartmentNames" resultMap="departmentNameByCodes">
+		SELECT
+			department_name
+		FROM
+			users.departments
+		WHERE
+			department_code IN(
+			<foreach item="code" collection="list" separator=",">
+			 	#{code}
+			</foreach>
+			)
+		ORDER BY
+			department_code asc
+	</select>
+
 </mapper>

@@ -3,7 +3,60 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="gLibrary.dataaccess.mapper.SearchDaoMapper">
-	<resultMap id="keywordMap" type="gLibrary.domain.books.Book">
+<!-- Collectionとして使用されるSQL -->
+	<!-- 推薦部署取得 -->
+		<resultMap id="department" type="gLibrary.domain.users.departments.Department">
+			<result column="department_code" property="departmentCode.code"/>
+			<result column="department_name" property="departmentName.name"/>
+		</resultMap>
+		<select id="selectDepartment" resultMap="department">
+			select
+				department.department_code,
+				department.department_name
+			from
+				books.recommendeddepartments recommendeddepartment
+			inner join
+				users.departments department
+			on
+				recommendeddepartment.department_code = department.department_code
+			where
+				recommendeddepartment.isbn = #{isbn}
+		</select>
+	<!-- 技術レベル取得 -->
+		<resultMap id="techniqueLevel" type="gLibrary.domain.books.techniquelevels.TechniqueLevel">
+			<result column="technique_rank" property="techniqueRank.rank"/>
+			<result column="grade" property="grade.grade"/>
+		</resultMap>
+		<select id="selectTechniqueLevel" resultMap="techniqueLevel">
+			select
+				technique_level.technique_rank,
+				technique_level.grade
+			from
+				books.technique_levels technique_level
+			inner join
+				books.book_levels book_level
+			on
+				technique_level.technique_rank = book_level.technique_rank
+			where
+				book_level.isbn = #{isbn}
+		</select>
+<!-- 検索用SQL -->
+	<sql id="selectBase">
+		SELECT
+			book.isbn,
+			book.title,
+			book.author,
+			publisher.publisher_name,
+			book.pubdate
+		FROM
+			books.books book
+		INNER JOIN
+			books.publishers publisher
+		ON
+			book.publisher_number = publisher.publisher_number
+	</sql>
+<!-- 複数条件検索 -->
+	<resultMap id="bookSearch" type="gLibrary.domain.books.Book">
 		<id column="isbn" property="isbn.isbn"/>
 		<result column="title" property="title.titleText.text"/>
 		<result column="author" property="author.author"/>
@@ -11,81 +64,167 @@
 		<result column="pubdate" property="pubDate.date"/>
 		<collection select="selectDepartment" column="isbn" property="recommendedDepartment.departmentList.departmentList" >
 		</collection>
-		<collection select="selectTechniqueLevel" column="isbn" property="techniqueLevelList">
+		<collection select="selectTechniqueLevel" column="isbn" property="techniqueLevelList.techniqueLevelList">
 		</collection>
 	</resultMap>
-	<resultMap id="department" type="gLibrary.domain.users.departments.Department">
-		<result column="department_code" property="departmentCode.code"/>
-		<result column="department_name" property="departmentName.name"/>
+	<select id="search" resultMap="bookSearch">
+		<include refid="selectBase" />
+	<where>
+		<if  test="map.keywords != null">
+			<foreach item="keyword" collection="map.keywords" open="(" separator="OR" close=")">
+					UPPER(book.title) LIKE UPPER('%' || #{keyword} || '%')
+				OR
+					UPPER(book.author) LIKE UPPER('%' || #{keyword} || '%')
+				OR
+					UPPER(publisher.publisher_name) LIKE UPPER('%' || #{keyword} || '%')
+				OR
+				EXISTS(
+				SELECT
+					*
+				FROM
+					books.book_descriptions book_description
+				WHERE
+					UPPER(book_description.description_text) LIKE UPPER('%' || #{keyword} || '%')
+				AND
+					book.isbn = book_description.isbn
+				)
+			</foreach>
+		</if>
+		<if test="map.isbns != null">
+			AND
+			<foreach item="isbn" collection="map.isbns" open="(" separator="OR" close=")">
+				book.isbn = translate(#{isbn}, '-', '')
+			</foreach>
+		</if>
+		<if test="map.titles != null">
+			AND
+			<foreach item="title" collection="map.titles" open="(" separator="OR" close=")">
+				UPPER(book.title) LIKE UPPER('%' || #{title} || '%')
+			</foreach>
+		</if>
+		<if test="map.authors != null">
+			AND
+			<foreach item="author" collection="map.authors" open="(" separator="OR" close=")">
+				UPPER(book.author) LIKE UPPER('%' || #{author} || '%')
+			</foreach>
+		</if>
+		<if test="map.publishers != null">
+			AND
+			<foreach item="publisher" collection="map.publishers" open="(" separator="OR" close=")">
+				UPPER(publisher.publisher_name) LIKE UPPER('%' || #{publisher} || '%')
+			</foreach>
+		</if>
+		<if test="fromCriteria.isNotEmpty() or toCriteria.isNotEmpty()">
+			AND
+			book.pubdate between
+					<if test="fromCriteria.isEmpty()">
+						'-infinity'
+					</if>
+					<if test="fromCriteria.isNotEmpty()">
+						#{fromDate}
+					</if>
+				AND
+					<if test="toCriteria.isEmpty()">
+						'infinity'
+					</if>
+					<if test="toCriteria.isNotEmpty()">
+						#{toDate}
+					</if>
+		</if>
+	</where>
+		ORDER BY
+			isbn asc
+	</select>
+<!-- キーワード検索 -->
+	<resultMap id="keyword" type="gLibrary.domain.books.Book">
+		<id column="isbn" property="isbn.isbn"/>
+		<result column="title" property="title.titleText.text"/>
+		<result column="author" property="author.author"/>
+		<result column="publisher_name" property="publisher.publisherName.name"/>
+		<result column="pubdate" property="pubDate.date"/>
+		<collection select="selectDepartment" column="isbn" property="recommendedDepartment.departmentList.departmentList" >
+		</collection>
+		<collection select="selectTechniqueLevel" column="isbn" property="techniqueLevelList.techniqueLevelList">
+		</collection>
 	</resultMap>
-	<resultMap id="techniqueLevel" type="gLibrary.domain.books.techniquelevels.TechniqueLevel">
-		<result column="technique_rank" property="techniqueRank.rank"/>
-		<result column="grade" property="grade.grade"/>
-	</resultMap>
-
-	<select id="keywordSearch" resultMap="keywordMap">
+	<select id="keywordSearch" resultMap="keyword">
+		<include refid="selectBase" />
+		WHERE
+	<foreach item="keyword" collection="keywords" separator="OR">
+			UPPER(book.title) LIKE UPPER('%' || #{keyword} || '%')
+		OR
+			UPPER(book.author) LIKE UPPER('%' || #{keyword} || '%')
+		OR
+			UPPER(publisher.publisher_name) LIKE UPPER('%' || #{keyword} || '%')
+		OR
+		EXISTS(
 		SELECT
-			book.isbn,
-			book.title,
-			book.author,
-			publisher.publisher_name,
-			book.pubdate,
-			department.department_name,
-			booklevel.technique_rank
+			*
 		FROM
-			books.books book
-		INNER JOIN
-			books.publishers publisher
-		ON
-			book.publisher_number = publisher.publisher_number
-		INNER JOIN
-			books.recommendeddepartments recommendeddepartment
-		ON
-			book.isbn = recommendeddepartment.isbn
-		INNER JOIN
-			users.departments department
-		ON
-			department.department_code = recommendeddepartment.department_code
-		INNER JOIN
-			books.book_levels booklevel
-		ON
-			booklevel.isbn = book.isbn
-		INNER JOIN
-			books.technique_levels techniquelevel
-		ON
-			techniquelevel.technique_rank = booklevel.technique_rank
-		INNER JOIN
 			books.book_descriptions book_description
-		ON
+		WHERE
+			UPPER(book_description.description_text) LIKE UPPER('%' || #{keyword} || '%')
+		AND
 			book.isbn = book_description.isbn
+		)
+	</foreach>
+		ORDER BY
+			isbn asc
+	</select>
+<!-- ISBN検索 -->
+	<resultMap id="isbn" type="gLibrary.domain.books.Book">
+		<id column="isbn" property="isbn.isbn"/>
+		<result column="title" property="title.titleText.text"/>
+		<result column="author" property="author.author"/>
+		<result column="publisher_name" property="publisher.publisherName.name"/>
+		<result column="pubdate" property="pubDate.date"/>
+		<collection select="selectDepartment" column="isbn" property="recommendedDepartment.departmentList.departmentList" >
+		</collection>
+		<collection select="selectTechniqueLevel" column="isbn" property="techniqueLevelList.techniqueLevelList">
+		</collection>
+	</resultMap>
+	<select id="isbnSearch" resultMap="isbn">
+		<include refid="selectBase" />
+		WHERE
+	<foreach item="isbn" collection="isbns" separator="OR">
+			book.isbn = translate(#{isbn}, '-', '')
+	</foreach>
+		ORDER BY
+			isbn asc
+	</select>
+<!-- 日付検索 -->
+	<resultMap id="date" type="gLibrary.domain.books.Book">
+		<id column="isbn" property="isbn.isbn"/>
+		<result column="title" property="title.titleText.text"/>
+		<result column="author" property="author.author"/>
+		<result column="publisher_name" property="publisher.publisherName.name"/>
+		<result column="pubdate" property="pubDate.date"/>
+		<collection select="selectDepartment" column="isbn" property="recommendedDepartment.departmentList.departmentList" >
+		</collection>
+		<collection select="selectTechniqueLevel" column="isbn" property="techniqueLevelList.techniqueLevelList">
+		</collection>
+	</resultMap>
+	<select id="pubDateSearch" resultMap="date">
+		<include refid="selectBase" />
+		WHERE
+			book.pubdate between
+				<if test="fromCriteria.isEmpty()">
+					'-infinity'
+				</if>
+				<if test="fromCriteria.isNotEmpty()">
+					#{fromDate}
+				</if>
+			AND
+				<if test="toCriteria.isEmpty()">
+					'infinity'
+				</if>
+				<if test="toCriteria.isNotEmpty()">
+					#{toDate}
+				</if>
 		ORDER BY
 			isbn asc
 	</select>
 
-	<select id="selectDepartment" resultMap="department">
-		select
-			department.department_code,
-			department.department_name
-		from
-			books.recommendeddepartments recommendeddepartment
-		inner join
-			users.departments department
-		on
-			recommendeddepartment.department_code = department.department_code
-		where
-			recommendeddepartment.isbn = #{isbn}
-	</select>
-	<select id="selectTechniqueLevel" resultMap="techniqueLevel">
-		select
-			technique_level.technique_rank,
-			technique_level.grade
-		from
-			books.technique_levels technique_level
-		inner join
-			books.book_levels book_level
-		on
-			technique_level.technique_rank = book_level.technique_rank
-		where
-			book_level.isbn = #{isbn}
-	</select>
+
+
 </mapper>

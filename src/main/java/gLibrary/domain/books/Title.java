@@ -1,7 +1,12 @@
 package gLibrary.domain.books;
 
+import javax.validation.Valid;
+
 public class Title {
+	@Valid
 	private TitleText titleText;
+
+	@Valid
 	private TitleKana titleKana;
 
 	public Title() {}

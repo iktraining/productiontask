@@ -3,6 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="gLibrary.dataaccess.mapper.TechniqueLevelDaoMapper">
+<!-- 一覧検索 -->
 	<resultMap id="techniqueLevelMap" type="gLibrary.domain.books.techniquelevels.TechniqueLevel">
 		<result column="technique_rank" property="techniqueRank.rank"/>
 		<result column="grade" property="grade.grade"/>
@@ -16,4 +17,24 @@
 		ORDER BY
 			technique_rank asc
 	</select>
+<!-- rankからgrade検索 -->
+	<resultMap id="grades" type="gLibrary.domain.books.techniquelevels.Grade">
+		<result column="grade" property="grade"/>
+	</resultMap>
+
+	<select id="findGrades" resultMap="grades">
+		SELECT
+			grade
+		FROM
+			books.technique_levels
+		WHERE
+			technique_rank IN(
+			<foreach item="rank" collection="list" separator=",">
+				 #{rank}
+			</foreach>
+		)
+		ORDER BY
+			technique_rank asc
+	</select>
+
 </mapper>

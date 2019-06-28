@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/bulma/css/bulma.min.css" th:href="@{/bulma/css/bulma.min.css}">
+  <link rel="stylesheet" href="/css/gLibrary.css" th:href="@{/css/gLibrary.css}">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<title>Genuine Library - 書籍登録</title>
+</head>
+<body>
+<header th:insert="~{header :: #header}"></header>
+<main>
+<div class="section">
+  <div class="container">
+    <div class="card">
+      <div class="card-header has-background-grey-dark">
+        <h2 class="card-header-title has-text-white-ter">書籍登録</h2>
+      </div>
+      <div th:if="${registeredIsbn} != null and ${registeredIsbn.booleanValue()} == true" class="registered-message">
+        <h2 class="has-text-white has-text-weight-bold has-text-centered">この本は既に登録されています</h2>
+      </div>
+      <form method="POST" th:action="@{/bookregisterconfirmation}" th:object="${book}">
+        <div class="card-content">
+          <div class="field is-horizontal" id="isbnInput">
+            <div class="field-label is-normal">
+              <label class="label" for="isbn"><span class="attention">※</span>ISBN</label>
+            </div>
+            <div class="field-body">
+              <div class="field">
+                <div class="control">
+                  <input class="input inputIsbn" type="text"
+                      th:field="*{isbn.isbn}"
+                      placeholder="978**********" v-model="isbn">
+                  </div>
+                <p class="has-text-danger" th:if="${#fields.hasErrors('isbn.isbn')}" th:errors="*{isbn.isbn}">isbn.isbn error</p>
+              </div>
+              <div id="isbnErrorMessage" v-model="message" class="has-text-danger">{{ message }}</div>
+              <div class="field">
+                <div class="control">
+                  <button class="button is-dark" v-on:click.prevent="getBookInfo">ISBNから書籍情報取得</button>
+                </div>
+              </div>
+            </div>
+          </div>
+            <div id="bookinfo">
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label" for="title"><span class="attention">※</span>タイトル</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input class="input" type="text" id="title"
+                        th:field="*{title.titleText.text}"
+                        v-bind:value="element.summary.title">
+                    </div>
+
+                    <p class="has-text-danger"
+                       th:if="${#fields.hasErrors('title.titleText.text')}"
+                       th:errors="*{title.titleText.text}">title.titleText.text error
+                    </p>
+
+                  </div>
+                </div>
+              </div>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label" for="titleKana"><span class="attention">※</span>タイトル仮名</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input class="input" type="text" id="titleKana"
+                        th:field="*{title.titleKana.kana}"
+                        v-bind:value="element.onix.DescriptiveDetail.TitleDetail.TitleElement.TitleText.collationkey">
+                    </div>
+                    <p class="has-text-danger"
+                       th:if="${#fields.hasErrors('title.titleKana.kana')}"
+                       th:errors="*{title.titleKana.kana}">title.titleKana.kana error</p>
+                  </div>
+                </div>
+              </div>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label" for="author"><span class="attention">※</span>著者</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input class="input" type="text" id="author"
+                        th:field="*{author.author}"
+                        v-bind:value="element.summary.author">
+                    </div>
+                    <p class="has-text-danger"
+                       th:if="${#fields.hasErrors('author.author')}"
+                       th:errors="*{author.author}">author.author error</p>
+                  </div>
+                </div>
+              </div>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label" for="publisher"><span class="attention">※</span>出版社</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input class="input" type="text" id="publisher"
+                        th:field="*{publisher.publisherName.name}"
+                        v-bind:value="element.summary.publisher">
+                    </div>
+                    <p class="has-text-danger"
+                       th:if="${#fields.hasErrors('publisher.publisherName.name')}"
+                       th:errors="*{publisher.publisherName.name}">publisher.publisherName.name error</p>
+                  </div>
+                </div>
+              </div>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label" for="pubdate"><span class="attention">※</span>出版日</label>
+                </div>
+                <div class="field-body">
+                  <div class="field is-narrow level-item">
+                    <div class="control">
+                      <div class="select pubdate">
+                        <select id="pub-from-year" name="pubfromyear"
+                                th:field="*{pubDate.publicationYear.year}"
+                                v-model="publicationYear">
+                          <option value="" selected>----</option>
+                          <option
+                            th:each="i:${#numbers.sequence(#numbers.formatInteger(#dates.format(#dates.createNow(), 'yyyy'), 4), 1970)}"
+                            th:value="${i}" th:text="${i}">
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <label class="label date-label" for="pub-from-year">年</label>
+                    <div class="control">
+                      <div class="select pubdate">
+                        <select id="pub-from-month" name="pubfrommonth"
+                                th:field="*{pubDate.publicationMonth.month}"
+                                v-model="publicationMonth">
+                          <option value="" selected>--</option>
+                          <option th:each="i:${#numbers.sequence(01,12)}"
+                            th:value="${i}" th:text="${i}">
+                          </option>
+                        </select>
+
+                      </div>
+                    </div>
+                    <label class="label date-label" for="pub-from-month">月</label>
+                  </div>
+                  <div th:if="${#fields.hasErrors('pubDate.publicationYear.year')} or ${#fields.hasErrors('pubDate.publicationMonth.month')}"
+                       class="has-text-danger">
+                    <p th:errors="*{pubDate.publicationYear.year}">pubDate.publicationYear.year error</p>
+                    <p th:errors="*{pubDate.publicationMonth.month}">pubDate.publicationMonth.month error</p>
+                  </div>
+                </div>
+              </div>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label" for="description">紹介文</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                     <textarea class="textarea" placeholder="紹介文" id="description"   th:field="*{bookDescription.discriptionText.text}"
+                               v-bind:value="element.onix.CollateralDetail.TextContent[0].Text">
+                     </textarea>
+                    </div>
+                    <p class="has-text-danger"
+                       th:if="${#fields.hasErrors('bookDescription.discriptionText.text')}"
+                       th:errors="*{bookDescription.discriptionText.text}">bookDescription.discriptionText.text error</p>
+                  </div>
+                </div>
+              </div>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label" for="image">書影</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input class="input" type="text" id="image"
+                             th:field="*{bookImage.imageUri.uri}"
+                             placeholder=".png か .jpg 、または .gif ファイルのパスを指定してください"
+                             v-bind:value="element.summary.cover">
+                    </div>
+                    <p class="has-text-danger"
+                       th:if="${#fields.hasErrors('bookImage.imageUri.uri')}"
+                       th:errors="*{bookImage.imageUri.uri}">bookImage.imageUri.uri error</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- check box -->
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="pubdate">
+                <!-- <span class="attention">※</span> -->
+                推薦部署
+                </label>
+              </div>
+              <div class="field-body">
+                <div class="checkbox-item" th:each="department:${departmentList.getDepartmentList()}">
+                  <div class="field">
+                    <div class="control">
+                      <label class="checkbox">
+                        <input type="checkbox"
+                               th:value="${department.departmentCode.code}"
+                               th:field="*{recommendedDepartment.departmentList.departmentList[__${departmentStat.index}__].departmentCode.code}">
+                        <span th:text="${department.departmentName.name}"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <p class="has-text-danger"
+                     th:if="${#fields.hasErrors('recommendedDepartment.departmentList.departmentList[__${departmentStat.index}__].departmentCode.code')}"
+                     th:errors="*{recommendedDepartment.departmentList.departmentList[__${departmentStat.index}__].departmentCode.code}">
+                     recommendedDepartment.departmentList.departmentList[__${departmentStat.index}__].departmentCode.code error
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="level">
+                <!-- <span class="attention">※</span> -->
+                <span class="label-text">読者に求める</span>
+                <span class="label-text">技術レベル</span>
+                </label>
+              </div>
+              <div class="field-body">
+                <div class="checkbox-item"
+                     th:each="techniqueLevel:${techniqueLevelList.getTechniqueLevelList()}">
+                  <div class="field">
+                    <div class="control">
+                      <label class="checkbox">
+                      <input
+                        type="checkbox"
+                        th:value="${techniqueLevel.techniqueRank.rank}"
+                        th:field="*{techniqueLevelList.techniqueLevelList[__${techniqueLevelStat.index}__].techniqueRank.rank}">
+                        <span th:text="${techniqueLevel.grade.grade}"></span>
+                      </label>
+                    </div>
+                  </div>
+                  <p class="has-text-danger"
+                     th:if="${#fields.hasErrors('techniqueLevelList.techniqueLevelList[__${techniqueLevelStat.index}__].techniqueRank.rank')}"
+                     th:errors="*{techniqueLevelList.techniqueLevelList[__${techniqueLevelStat.index}__].techniqueRank.rank}">
+                     techniqueLevelList.techniqueLevelList[__${techniqueLevelStat.index}__].techniqueRank.rank error
+                </p>
+                </div>
+                <p class="has-text-danger"
+                     th:if="${#fields.hasErrors('techniqueLevelList.empty')}"
+                     th:errors="*{techniqueLevelList.empty}">
+                     techniqueLevelList error
+                </p>
+              </div>
+            </div>
+            <p class="attention">※印があるのは必須入力項目です。</p>
+          </div>
+          <div class="field card-footer">
+            <div class="control card-footer-item">
+              <div class="content">
+                <input class="button is-primary" type="submit" value="登録確認">
+              </div>
+            </div>
+          </div>
+      </form>
+
+    </div>
+
+  </div>
+</div>
+</main>
+
+
+<footer class="footer" th:insert="~{footer :: #footer}"></footer>
+<script type="text/javascript" src="/js/headermenu.js" th:src="@{/js/headermenu.js}" charset="utf-8"></script>
+<script type="text/javascript" src="/js/bookinfogetter.js" th:src="@{/js/bookinfogetter.js}" charset="utf-8"></script>
+</body>
+</html>

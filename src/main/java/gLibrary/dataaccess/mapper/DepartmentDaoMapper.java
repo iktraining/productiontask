@@ -5,12 +5,10 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import gLibrary.domain.users.departments.Department;
+import gLibrary.domain.users.departments.DepartmentName;
 
 @Mapper
 public interface DepartmentDaoMapper {
 	List<Department> findDepartmentList();
-
-	/*	@Select("select department_code as code, department_name as name  from users.departments ")
-		@MapKey("code")
-		Map<String, String> findAllDepartmentMap();*/
+	List<DepartmentName> findDepartmentNames(List<String> codes);
 }

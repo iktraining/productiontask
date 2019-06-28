@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gLibrary.dataaccess.mapper.BookDaoMapper">
+	<resultMap id="isbn" type="gLibrary.domain.books.Isbn">
+		<result column="isbn" property="isbn"/>
+	</resultMap>
+<!-- 書籍ISBN検索 -->
+	<select id="findBookByIsbn" resultMap="isbn">
+		SELECT
+			isbn
+		FROM
+			books.books
+		WHERE
+			 isbn = translate(#{isbn}, '-', '')
+	</select>
+
+<!-- 書籍登録 -->
+	<insert id="registeredByBookAndPublisher">
+		INSERT INTO
+			books.books(isbn, title, title_kana, author, publisher_number ,pubdate, created_at, update_at)
+		VALUES
+			(translate(#{book.isbn.isbn}, '-', ''), #{book.title.titleText.text}, #{book.title.titleKana.kana}, #{book.author.author}, #{publisher.publisherNumber.number}, #{publicationDate}, now(), now())
+	</insert>
+<!-- 紹介文登録 -->
+	<insert id="registerDescription" parameterType="gLibrary.domain.books.Book">
+		INSERT INTO
+			books.book_descriptions(isbn, description_text, created_at, update_at)
+		VALUES
+			(translate(#{isbn.isbn}, '-', ''), #{bookDescription.discriptionText.text}, now(), now())
+	</insert>
+<!-- 書影登録 -->
+	<insert id="registerBookImage" parameterType="gLibrary.domain.books.Book">
+		INSERT INTO
+			books.book_images(isbn, image_uri, created_at, update_at)
+		VALUES
+			(translate(#{isbn.isbn}, '-', ''), #{bookImage.imageUri.uri}, now(), now())
+	</insert>
+<!-- 推薦部署登録 -->
+	<insert id="registerRecommendedDepartment">
+		INSERT INTO
+			books.recommendeddepartments(isbn, department_code, created_at, update_at)
+		VALUES
+			(#{isbn.isbn}, #{departmentCode.code}, now(), now())
+	</insert>
+<!-- 本レベル登録 -->
+	<insert id="registerBookLevel">
+		INSERT INTO
+			books.book_levels(isbn, technique_rank, created_at, update_at)
+		VALUES
+			(#{isbn.isbn}, #{techniqueRank.rank}, now(), now())
+	</insert>
+</mapper>

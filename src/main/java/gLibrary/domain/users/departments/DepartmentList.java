@@ -2,7 +2,10 @@ package gLibrary.domain.users.departments;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 public class DepartmentList {
+	@Valid
 	private List<Department> departmentList;
 
 	public DepartmentList() {}

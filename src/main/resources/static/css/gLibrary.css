@@ -17,7 +17,27 @@
 	display: inline-block;
 }
 
-/* search result */
+/* Search result */
 .search-wrapper {
   margin: 0 5rem 0;
+}
+
+/* Book Register Form */
+.registered-message {
+  background-color: red;
+  padding: 1rem;
+}
+
+/* Book Register Confirmation */
+.similar-publisher-info {
+  margin: .5rem 0 .5rem;
+}
+/* all */
+.attention {
+  color: red;
+}
+
+/* header */
+#header .hero-body{
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, .3);
 }

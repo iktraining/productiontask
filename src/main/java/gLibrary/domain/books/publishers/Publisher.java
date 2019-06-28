@@ -1,7 +1,11 @@
 package gLibrary.domain.books.publishers;
 
+import javax.validation.Valid;
+
 public class Publisher {
+	@Valid
 	private PublisherName publisherName;
+
 	private PublisherNumber publisherNumber;
 
 	public Publisher() {}

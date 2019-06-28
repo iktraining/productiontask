@@ -16,6 +16,11 @@ public class PublisherNameCriteria {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	public boolean hasName() {
+		if(name == null) {
+			return false;
+		}
+		return true;
+	}
 
 }

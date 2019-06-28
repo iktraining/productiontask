@@ -1,6 +1,9 @@
 package gLibrary.domain.books.bookdescriptions;
 
+import javax.validation.Valid;
+
 public class BookDescription {
+	@Valid
 	private DescriptionText discriptionText;
 
 	public BookDescription() {}

@@ -1,8 +1,11 @@
 package gLibrary.domain.books;
 
+import javax.validation.Valid;
+
 import gLibrary.domain.users.departments.DepartmentList;
 
 public class RecommendedDepartment{
+	@Valid
 	private DepartmentList departmentList;
 
 	public RecommendedDepartment() {}

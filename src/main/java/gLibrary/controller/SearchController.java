@@ -1,9 +1,12 @@
 package gLibrary.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -22,18 +25,14 @@ public class SearchController {
 	@Autowired
 	SearchService searchService;
 
-	/*private Map<String, String> getCheckBoxItems(){
-		Map<String, String> selectMap = new LinkedHashMap<String, String>();
-		//DBから値を入れ込む
-
-		return selectMap;
-	}*/
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+	}
 
 	@PostMapping("/search")
 	public String postSearch(@ModelAttribute BookSearchCriteria bookSearchCriteria, Model model) {
-		//TODO Search Service
-		//TODO keyword
-		BookList bookList = searchService.keywordSearch(bookSearchCriteria.getKeywordCriteria().getKeyword());
+		BookList bookList = searchService.search(bookSearchCriteria);
 		model.addAttribute("bookList", bookList);
 		//TODO 再検索時エラー起きる
 		model.addAttribute("departmentList", departmentService.findDepartmentList());

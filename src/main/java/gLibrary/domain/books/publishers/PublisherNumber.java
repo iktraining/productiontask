@@ -1,6 +1,9 @@
 package gLibrary.domain.books.publishers;
 
+import javax.validation.constraints.Min;
+
 public class PublisherNumber {
+	@Min(1)
 	private Integer number;
 
 	public PublisherNumber() {}

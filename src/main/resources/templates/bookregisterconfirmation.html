@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/bulma/css/bulma.min.css" th:href="@{/bulma/css/bulma.min.css}">
+  <link rel="stylesheet" href="/css/gLibrary.css" th:href="@{/css/gLibrary.css}">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <title>Genuine Library - 書籍登録 確認</title>
+</head>
+<body>
+  <header th:insert="~{header :: #header}"></header>
+    <div class="section">
+    <div class="container">
+      <div class="card">
+        <div class="card-header has-background-grey-dark">
+          <h2 class="card-header-title has-text-white-ter">書籍登録 - 確認</h2>
+        </div>
+        <form method="POST" th:action="@{/bookregister}"
+          th:object="${book}">
+          <div class="card-content">
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="isbn"><span class="attention">※</span>ISBN</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <p id="isbn" th:text="*{isbn.isbn}"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="title"><span class="attention">※</span>タイトル</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <p id="title" th:text="*{title.titleText.text}"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="titleKana"><span class="attention">※</span>タイトル仮名</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <p id="titleKana" th:text="*{title.titleKana.kana}"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="author"><span class="attention">※</span>著者</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <p id="author" th:text="*{author.author}"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="publisher"><span class="attention">※</span>出版社</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <p id="publisher" th:text="*{publisher.publisherName.name}"></p>
+                  </div>
+                  <div th:if="${similarPublishers} != null" class="similar-publisher-info">
+                    <article class="message is-warning">
+                      <div class="message-header">
+                        <p>類似の出版社名があります !</p>
+                      </div>
+                      <div class="message-body">
+                        <p th:each="similarPublisher : ${similarPublishers}">
+                          <span th:text="${similarPublisher.publisherName.name}"></span>
+                        </p>
+                      </div>
+                    </article>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="pubdate"><span class="attention">※</span>出版日</label>
+              </div>
+              <div class="field-body">
+                <div class="field is-narrow level-item">
+                  <div class="control">
+                    <div class="pubdate">
+                      <span th:text="*{pubDate.publicationYear.year}"></span>
+                    </div>
+                  </div>
+                  <label class="label date-label" for="pub-from-year">年</label>
+                  <div class="control">
+                    <div class="pubdate">
+                      <span th:text="*{pubDate.publicationMonth.month}"></span>
+                    </div>
+                  </div>
+                  <label class="label date-label" for="pub-from-month">月</label>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="description">紹介文</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                   <p id="description" th:text="*{bookDescription.discriptionText.text}"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="image">書影</label>
+              </div>
+              <div class="media">
+                <div class="media-left">
+                  <figure>
+                    <img th:src="*{bookImage.imageUri.uri}" th:alt="*{bookImage.imageUri.uri}">
+                  </figure>
+                </div>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <p id="image" th:text="*{bookImage.imageUri.uri}"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- check box -->
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="pubdate">
+                <!-- <span class="attention">※</span> -->
+                推薦部署
+                </label>
+              </div>
+              <div class="field-body">
+                <div class="checkbox-item">
+                  <div class="field">
+                    <div class="control">
+                        <p th:each="departmentName:${departmentNames}">
+                           <span th:text="${departmentName.name}"></span>
+                        </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" for="level">
+                <!-- <span class="attention">※</span> -->
+                <span class="label-text">読者に求める</span>
+                <span class="label-text">技術レベル</span>
+                </label>
+              </div>
+              <div class="field-body">
+                <div class="checkbox-item">
+                  <div class="field">
+                    <div class="control">
+                      <p th:each="grade:${grades}">
+                      <span th:text="${grade.grade}"></span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="attention">※印があるのは必須入力項目です。</p>
+            <div class="has-text-centered">
+              <p>上記の内容で登録してよろしいですか？</p>
+            </div>
+          </div>
+          <div class="field card-footer">
+            <div class="control card-footer-item">
+              <div class="content">
+                <input class="button is-warning" type="submit" name="modify" value="修正">
+                <input class="button is-primary" type="submit" name="register" value="登録">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <ul>
+    <li th:each="error:${#fields.detailedErrors()}" th:text="${error.message}">
+    </li>
+  </ul>
+</main>
+
+  <footer class="footer" th:insert="~{footer :: #footer}"></footer>
+  <script type="text/javascript" src="/js/headermenu.js" th:src="@{/js/headermenu.js}" charset="utf-8"></script>
+</body>
+</body>
+</html>

@@ -16,4 +16,11 @@ public class TitleCriteria {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+	public boolean hasTitle() {
+		if(title == null) {
+			return false;
+		}
+		return true;
+	}
 }
