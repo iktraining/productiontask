@@ -41,6 +41,10 @@ public class Department {
 		this.departmentKana = departmentKana;
 	}
 
+	public boolean isEmpty() {
+		return departmentCode.isEmpty();
+	}
+
 	@Override
 	public String toString() {
 		return String.format("Department [departmentCode=%s, departmentName=%s, departmentKana=%s]", departmentCode,

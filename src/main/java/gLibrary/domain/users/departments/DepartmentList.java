@@ -3,6 +3,9 @@ package gLibrary.domain.users.departments;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.AssertFalse;
+
+import gLibrary.domain.validationgroup.ValidGroup1;
 
 public class DepartmentList {
 	@Valid
@@ -20,6 +23,14 @@ public class DepartmentList {
 
 	public void setDepartmentList(List<Department> departmentList) {
 		this.departmentList = departmentList;
+	}
+
+	@AssertFalse(groups = ValidGroup1.class, message = "部署を選択してください")
+	public boolean isEmpty() {
+		if(departmentList.stream().anyMatch(department -> !department.isEmpty())) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override

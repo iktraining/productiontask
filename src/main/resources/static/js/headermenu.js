@@ -77,16 +77,35 @@ var isbn = new Vue({
                         return;
                     }
                     bookinfo.element = response.data[0];
-                    this.dateSplit(bookinfo.element);
+                    this.dateFormat(bookinfo.element);
                 }
             );
 
         },
-        dateSplit: function(element){
+        dateFormat: function(element){
+            /*
             var date = element.summary.pubdate.split('-');
             bookinfo.publicationYear = date[0];
             bookinfo.publicationMonth = parseInt(date[1]);
+            */
+        	var date = element.summary.pubdate.replace(/-/g,'');
+        	bookinfo.publicationYear = date.slice(0, 4);
+        	bookinfo.publicationMonth = parseInt(date.slice(4, 6));
         }
 
     }
 });
+
+/*var searchcondition = new Vue({
+	el: '#search-condition',
+	data: {
+		keyword: '',
+		isbn: ''
+	},
+	methods: {
+		remove: function(){
+			this.keyword = '';
+			this.isbn = '';
+		}
+	}
+});*/

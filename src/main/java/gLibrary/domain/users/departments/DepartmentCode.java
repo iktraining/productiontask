@@ -21,4 +21,8 @@ public class DepartmentCode {
 	public void setCode(String code) {
 		this.code = code;
 	}
+
+	public boolean isEmpty() {
+		return code == null;
+	}
 }

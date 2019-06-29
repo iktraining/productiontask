@@ -222,6 +222,12 @@
                      recommendedDepartment.departmentList.departmentList[__${departmentStat.index}__].departmentCode.code error
                   </p>
                 </div>
+                <div th:if="${#fields.hasErrors('recommendedDepartment.departmentList.empty')}">
+                  <p class="has-text-danger"
+                     th:errors="*{recommendedDepartment.departmentList.empty}">
+                     recommendedDepartment.departmentList error
+                  </p>
+                </div>
               </div>
             </div>
             <div class="field is-horizontal">
@@ -252,11 +258,12 @@
                      techniqueLevelList.techniqueLevelList[__${techniqueLevelStat.index}__].techniqueRank.rank error
                 </p>
                 </div>
-                <p class="has-text-danger"
-                     th:if="${#fields.hasErrors('techniqueLevelList.empty')}"
+                <div th:if="${#fields.hasErrors('techniqueLevelList.empty')}">
+                  <p class="has-text-danger"
                      th:errors="*{techniqueLevelList.empty}">
                      techniqueLevelList error
-                </p>
+                  </p>
+                </div>
               </div>
             </div>
             <p class="attention">※印があるのは必須入力項目です。</p>

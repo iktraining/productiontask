@@ -159,11 +159,9 @@
                   th:each="department:${departmentList.getDepartmentList()}">
                   <div class="field">
                     <div class="control">
-                      <label class="checkbox"> <input
-                        type="checkbox"
-                        th:attr="name=${department.departmentCode.code}">
-                        <span
-                        th:text="${department.departmentName.name}"></span>
+                      <label class="checkbox">
+                      <input type="checkbox" th:attr="name=${department.departmentCode.code}">
+                        <span th:text="${department.departmentName.name}"></span>
                       </label>
                     </div>
                   </div>

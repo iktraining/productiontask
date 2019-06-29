@@ -18,6 +18,7 @@
       <div class="tile is-ancestor">
         <div class="tile is-vertical is-12">
 <!-- 上部検索窓 -->
+<!--
           <div class="tile is-parent">
             <div class="tile is-parent search-wrapper">
               <div class="tile is-child is-danger">
@@ -44,6 +45,7 @@
               </div>
             </div>
           </div>
+-->
 <!-- 上部検索窓ここまで -->
           <div class="tile is-parent">
 <!-- 検索条件欄 -->
@@ -54,18 +56,20 @@
                     <p class="card-header-title has-text-white-ter">検索条件</p>
                   </div>
                   <form th:action="@{/search}" method="POST"
-                    th:object="${bookSearchCriteria}">
+                    th:object="${bookSearchCriteria}" >
+                    <div id="search-condition">
                     <div class="card-content">
                       <div class="field">
                         <div class="field-label is-normal has-text-left">
-                          <label class="label" for="keyword-research">キーワード</label>
+                          <label class="label" for="keyword">キーワード</label>
                         </div>
                         <div class="field-body">
                           <div class="field">
                             <div class="control">
-                              <input id="keyword-research" class="input"
-                                type="text"
-                                th:value="*{keywordCriteria.keyword == null ? '' : keywordCriteria.keyword}">
+                              <input id="keyword-research" class="input" type="text"
+                                th::value="*{keywordCriteria.keyword == null ? '' : keywordCriteria.keyword}"
+                                th:field="*{keywordCriteria.keyword}"
+                                >
                             </div>
                           </div>
                         </div>
@@ -78,7 +82,8 @@
                           <div class="field">
                             <div class="control">
                               <input class="input" type="text" id="isbn"
-                                th:value="*{isbn.isbn == null ? '' : isbn.isbn}">
+                                th:value="*{isbn.isbn == null ? '' : isbn.isbn}"
+                                th:field="*{isbn.isbn}">
                             </div>
                           </div>
                         </div>
@@ -90,9 +95,9 @@
                         <div class="field-body">
                           <div class="field">
                             <div class="control">
-                              <input class="input" type="text"
-                                id="title"
-                                th:value="*{titleCriteria.title == null ? '' : titleCriteria.title}">
+                              <input class="input" type="text" id="title"
+                                th:value="*{titleCriteria.title == null ? '' : titleCriteria.title}"
+                                th:field="*{titleCriteria.title}">
                             </div>
                           </div>
                         </div>
@@ -104,9 +109,9 @@
                         <div class="field-body">
                           <div class="field">
                             <div class="control">
-                              <input class="input" type="text"
-                                id="author"
-                                th:value="*{authorCriteria.author == null ? '' : authorCriteria.author}">
+                              <input class="input" type="text" id="author"
+                                th:value="*{authorCriteria.author == null ? '' : authorCriteria.author}"
+                                th:field="*{authorCriteria.author}">
                             </div>
                           </div>
                         </div>
@@ -118,9 +123,9 @@
                         <div class="field-body">
                           <div class="field">
                             <div class="control">
-                              <input class="input" type="text"
-                                id="publisher"
-                                th:value="*{publisherNameCriteria.name == null ? '' : publisherNameCriteria.name}">
+                              <input class="input" type="text" id="publisher"
+                                th:value="*{publisherNameCriteria.name == null ? '' : publisherNameCriteria.name}"
+                                th:field="*{publisherNameCriteria.name}">
                             </div>
                           </div>
                         </div>
@@ -240,8 +245,10 @@
                     <div class="field card-footer">
                       <div class="card-footer-item">
                         <div class="control">
-                          <input class="button is-danger is-outlined"
-                            type="reset" value="クリア">
+                          <button class="button is-danger is-outlined"
+                            v-on:click.prevent="remove">
+                            クリア
+                          </button>
                         </div>
                       </div>
                       <div class="card-footer-item">
@@ -250,6 +257,7 @@
                             value="再検索">
                         </div>
                       </div>
+                    </div>
                     </div>
                   </form>
                 </div>

@@ -52,7 +52,7 @@ public class BookRegisterController {
 
 	@GetMapping("/bookregisterconfirmation")
 	public String getBookRegesterForm(){
-		return "redirect:/bookregister";
+		return "redirect:/index";
 	}
 
 	@PostMapping("/bookregisterconfirmation")
@@ -94,7 +94,7 @@ public class BookRegisterController {
 			publisherService.register(book.getPublisher());
 			publisher =  publisherService.findPublisherNumber(book.getPublisher());
 		}
-		// 出版番号,名称いれて本登録
+		// 出版番号,名称を入れて本登録
 		bookService.register(book, publisher);
 		// 紹介文登録
 		if(null != book.getBookDescription().getDiscriptionText().getText()) {

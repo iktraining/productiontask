@@ -28,6 +28,10 @@
   padding: 1rem;
 }
 
+#bookinfo {
+  margin-bottom: .75rem;
+}
+
 /* Book Register Confirmation */
 .similar-publisher-info {
   margin: .5rem 0 .5rem;
